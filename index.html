@@ -2,6 +2,15 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JYFBPR3B53"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JYFBPR3B53');
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Espaço MR – Studio de Sobrancelhas em Ribeirão Preto | Design e Microblading</title>
 <meta name="description" content="Design de sobrancelhas, microblading, brow lamination, lash lifting e limpeza de pele com Mariana Russignoli, especialista há 10 anos. Nota 5,0 no Google. Prime Office, Jardim Nova Aliança Sul, Ribeirão Preto. Valet cortesia.">
@@ -608,6 +617,47 @@
     lb.addEventListener('touchend', function(e){
       if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
       if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+    });
+  })();
+
+  /* Analytics: cliques importantes */
+  (function(){
+    function loc(el){
+      if (el.closest('.wa-float')) return 'botao_flutuante';
+      if (el.closest('header')) return 'menu';
+      var s = el.closest('section'); if (!s) return 'rodape';
+      if (s.id) return s.id;
+      if (s.classList.contains('hero')) return 'topo';
+      if (s.classList.contains('final')) return 'chamada_final';
+      if (s.classList.contains('results')) return 'resultados';
+      if (s.querySelector('.course')) return 'curso';
+      if (s.querySelector('.spaces')) return 'espaco';
+      return 'outro';
+    }
+    function send(name, params){ if (typeof gtag === 'function') gtag('event', name, params); }
+    document.addEventListener('click', function(e){
+      var a = e.target.closest('a'); if (!a) return;
+      var href = a.getAttribute('href') || '', where = loc(a);
+      if (a.hasAttribute('data-wa') || href.indexOf('wa.me') > -1){
+        var svc = a.closest('.svc'), h = svc && svc.querySelector('h3');
+        var p = { local: where, servico: h ? h.textContent.trim() : '', texto: (a.textContent || '').trim().slice(0,60) };
+        send('whatsapp_click', p);
+        send('generate_lead', { method: 'whatsapp', local: where });
+      } else if (href.indexOf('zynor.app') > -1){
+        send('agenda_online_click', { local: where });
+        send('generate_lead', { method: 'agenda_online', local: where });
+      } else if (href.indexOf('maps/dir') > -1){
+        send('como_chegar_click', { local: where });
+      } else if (href.indexOf('maps.google.com') > -1){
+        send('avaliacoes_google_click', { local: where });
+      } else if (href.indexOf('instagram.com') > -1){
+        send('instagram_click', { local: where });
+      }
+    }, true);
+    document.addEventListener('click', function(e){
+      var z = e.target.closest('.zoomable'); if (!z) return;
+      var cap = z.querySelector('span, figcaption');
+      send('foto_ampliada', { local: loc(z), foto: cap ? cap.textContent.trim() : '' });
     });
   })();
 </script>
